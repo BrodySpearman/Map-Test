@@ -1,10 +1,26 @@
 .modal {
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: 0;
+    margin-bottom: -2rem;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #272727c0;
-    padding: 20px;
+    background-color: #272727d8;
+    padding: 20px 40px 20px 40px;
     z-index: 50;
     font-size: larger;
+}
+
+.lat, .lon {
+    margin: 0;
+}
+
+.lat {
+    color: #4caf50;
+}
+
+.lon {
+    color: #ff5e00;
 }

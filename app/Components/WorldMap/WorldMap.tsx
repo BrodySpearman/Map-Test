@@ -6,19 +6,16 @@ import { fromLonLat, toLonLat } from "ol/proj";
 import "ol/ol.css";
 import "rlayers/control/layers.css"
 import type { RView } from "../../../node_modules/rlayers/dist/RMap";
-import { createPortal } from "react-dom";
-import ReactDOM from "react-dom";
+import dynamic from "next/dynamic";
 
 import { RMap, ROSM, RControl, } from "rlayers";
-import { Point } from "ol/geom";
-import { Pointer } from "ol/interaction";
-import LocModal from "../LocModal/LocModal";
-import ClientModal from "../LocModal/clientModal";
-import { create } from "domain";
-import { set } from "ol/transform";
 
 const origin = [2.364, 48.82];
 const initial: RView = { center: fromLonLat(origin), zoom: 11 };
+
+const LocModal = dynamic(() => import("../LocModal/LocModal"), {
+  ssr: false,
+});
 
 export default function WorldMap(): JSX.Element {
   const [loc, setLoc] = React.useState(origin);
@@ -37,11 +34,9 @@ export default function WorldMap(): JSX.Element {
           (e: MapBrowserEvent<PointerEvent | KeyboardEvent | WheelEvent>) => {
             const coord = e.map.getCoordinateFromPixel(e.pixel);
             const lonLat = toLonLat(coord);
-
             setLoc(lonLat);
-            console.log("Clicked at ", lonLat);
-
             setShowModal(true);
+            console.log("Clicked at ", lonLat);
           },
           []
         )}
@@ -51,14 +46,9 @@ export default function WorldMap(): JSX.Element {
         <RControl.RScaleLine />
         <RControl.RAttribution />
         <RControl.RZoomSlider />
-        {showModal && (
-          <ClientModal selector="#main"><LocModal /></ClientModal>
-        )}
-        
+        {showModal && <LocModal coordinates={loc} />}
         
       </RMap>
-
-      <div className={styles.locModal}></div>
     </React.Fragment>
   );  
 }
