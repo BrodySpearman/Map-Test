@@ -2,15 +2,15 @@
 import styles from "./WorldMap.module.css";
 import PinIcon from "../../../public/PinIcon.svg";
 
+import dynamic from "next/dynamic";
 import React, { JSX, useCallback } from "react";
+
 import { MapBrowserEvent } from "ol";
 import { Point } from "ol/geom";
 import { fromLonLat, toLonLat } from "ol/proj";
 import "ol/ol.css";
 import "rlayers/control/layers.css"
 import type { RView } from "../../../node_modules/rlayers/dist/RMap";
-import dynamic from "next/dynamic";
-
 import { RMap, ROSM, RControl, RLayerVector, RFeature, RStyle } from "rlayers";
 
 const origin = [2.364, 48.82];
@@ -36,6 +36,7 @@ export default function WorldMap(): JSX.Element {
         initial={initial}
         view={[view, setView]}
         noDefaultControls={true}
+
         onClick={useCallback(
           (e: MapBrowserEvent<PointerEvent | KeyboardEvent | WheelEvent>) => {
             const coord = e.map.getCoordinateFromPixel(e.pixel);
@@ -50,6 +51,7 @@ export default function WorldMap(): JSX.Element {
           []
         )}
       >
+
         <ROSM />
         <RControl.RScaleLine />
         <RControl.RAttribution />
@@ -57,6 +59,7 @@ export default function WorldMap(): JSX.Element {
 
         {/* On click features */}
         {showModal && <LocModal coordinates={loc} />}
+
         {isPinned && (
           <RLayerVector>
             <RFeature geometry={new Point(fromLonLat(loc))}>
@@ -65,7 +68,6 @@ export default function WorldMap(): JSX.Element {
                   src={PinIcon.src}
                   scale={.7}
                   anchor={[0.5, 1]}
-                  
                 />
               </RStyle.RStyle>
             </RFeature>
